@@ -10,7 +10,9 @@ int main(int argc, char **argv)
 {
     srand(time(NULL));
     board *b1;
+    int outputDecision;
     int input;
+    string sInput;
 
     cout << "1) Read map file \n2) Generate random board" << endl;
     cin >> input;
@@ -37,29 +39,49 @@ int main(int argc, char **argv)
     cout << "What game mode? 1) Classic 2)Doughnut 3)Mirror" << endl;
     cin >> input;
     b1->setGameMode(input);
-    
+    cout << "Print to 1) console or 2) outfile?" << endl;
+    cin >> outputDecision;
+    if(outputDecision == 1)
+    {
+        cout << "Would you like to pause between each generation? y or n?" << endl;
+        cin >> sInput;
+    }
 
-    b1->printBoard();
-    cout<<endl;
+    if (outputDecision == 1)
+        b1->printBoard();
+    else if (outputDecision == 2)
+        b1->printBoardToFile();
+    //cout<<endl;
     if (b1->getGameMode() == 2)
         b1->makeItADonut();
     else if (b1->getGameMode() == 3)
         b1->makeItAMirror();
-    cout <<endl;
-    //b1->printBoardWithBorders();
+    if (sInput == "y")
+        system("read -p 'Press Enter to continue...' var");
+        //cout <<endl;
+        //b1->printBoardWithBorders();
     int counter = 0;
-    while(!b1->isEmpty())
+    while(!b1->isEmpty() && !b1->isStable())
     {
         counter++;
-        cout << endl;
-        b1->printNeighbors();
-        cout << endl;
+        //cout << endl;
+        //b1->printNeighbors();
+        //cout << endl;
+        if (b1->getGenNum() > 0)
+            b1->storePreviousGen();
+        if (b1->getGenNum() > 1)
+            b1->store2GensBack();
         b1->nextGeneration();
-        cout << endl;
+        //cout << endl;
         if (b1->getGameMode() == 2)
             b1->makeItADonut();
         else if (b1->getGameMode() == 3)
             b1->makeItAMirror();
-        b1->printBoard();
+        if (outputDecision == 1)
+            b1->printBoard();
+        else if (outputDecision == 2)
+            b1->printBoardToFile();
+        if (sInput == "y")
+            system("read -p 'Press Enter to continue...' var");
     }
 }

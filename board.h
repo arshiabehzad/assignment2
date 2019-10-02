@@ -19,6 +19,13 @@ class board{
         void makeItADonut();
         void makeItAMirror();
         void printBoardWithBorders();
+        void storePreviousGen();
+        void store2GensBack();
+        void printBoardToFile();
+        void clearFile();
+        int getGenNum();
+        bool isStable();
+
         ~board();
 
         Cell **boardArray;
